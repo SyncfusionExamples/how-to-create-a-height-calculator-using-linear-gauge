@@ -20,8 +20,21 @@ class HeightCalculator extends StatefulWidget {
 class _HeightCalculatorState extends State<HeightCalculator> {
   _HeightCalculatorState();
   double _pointerValue = 130;
-  double minimumLevel = 0;
-  double maximumLevel = 200;
+  final double _maximumLevel = 200;
+
+  List<LinearAxisLabel> _generateLabels() {
+    return [
+      const LinearAxisLabel(text: '0 cm', value: 0),
+      const LinearAxisLabel(text: '25 cm', value: 25),
+      const LinearAxisLabel(text: '50 cm', value: 50),
+      const LinearAxisLabel(text: '75 cm', value: 75),
+      const LinearAxisLabel(text: '100 cm', value: 100),
+      const LinearAxisLabel(text: '125 cm', value: 125),
+      const LinearAxisLabel(text: '150 cm', value: 150),
+      const LinearAxisLabel(text: '175 cm', value: 175),
+      const LinearAxisLabel(text: '200 cm', value: 200),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,74 +48,41 @@ class _HeightCalculatorState extends State<HeightCalculator> {
   Widget _buildHeightCalculator(BuildContext context) {
     return SfLinearGauge(
       orientation: LinearGaugeOrientation.vertical,
-      maximum: maximumLevel,
+      maximum: _maximumLevel,
       tickPosition: LinearElementPosition.outside,
       labelPosition: LinearLabelPosition.outside,
       minorTicksPerInterval: 5,
       interval: 25,
-      onGenerateLabels: () {
-        return <LinearAxisLabel>[
-          const LinearAxisLabel(text: '0 cm', value: 0),
-          const LinearAxisLabel(text: '25 cm', value: 25),
-          const LinearAxisLabel(text: '50 cm', value: 50),
-          const LinearAxisLabel(text: '75 cm', value: 75),
-          const LinearAxisLabel(text: '100 cm', value: 100),
-          const LinearAxisLabel(text: '125 cm', value: 125),
-          const LinearAxisLabel(text: '150 cm', value: 150),
-          const LinearAxisLabel(text: '175 cm', value: 175),
-          const LinearAxisLabel(text: '200 cm', value: 200),
-        ];
-      },
-      axisTrackStyle: LinearAxisTrackStyle(
-          color: _pointerValue < 70
-              ? const Color(0xff008000)
-              : _pointerValue < 120
-                  ? const Color(0xffE60026)
-                  : const Color(0xff702963)),
+      onGenerateLabels: _generateLabels,
+      axisTrackStyle: const LinearAxisTrackStyle(color: Color(0xff134B70)),
       markerPointers: <LinearMarkerPointer>[
         LinearShapePointer(
           value: _pointerValue,
           enableAnimation: false,
           onChanged: (dynamic value) {
-            setState(
-              () {
-                _pointerValue = value as double;
-              },
-            );
+            setState(() {
+              _pointerValue = value as double;
+            });
           },
           shapeType: LinearShapePointerType.rectangle,
-          color: const Color(0xff0074E3),
+          color: Colors.black,
           height: 2,
           width: 350,
         ),
-        LinearWidgetPointer(
+        _buildLinearWidgetPointer(
           value: _pointerValue,
-          enableAnimation: false,
-          onChanged: (dynamic value) {
-            setState(
-              () {
-                _pointerValue = value as double;
-              },
-            );
-          },
+          offset: 0,
           child: SizedBox(
             width: 24,
             height: 16,
             child: Image.asset(
               'asset/rectangle_pointer.png',
+              color: Colors.black,
             ),
           ),
         ),
-        LinearWidgetPointer(
+        _buildLinearWidgetPointer(
           value: _pointerValue,
-          enableAnimation: false,
-          onChanged: (dynamic value) {
-            setState(
-              () {
-                _pointerValue = value as double;
-              },
-            );
-          },
           offset: 350,
           position: LinearElementPosition.outside,
           child: Container(
@@ -122,11 +102,6 @@ class _HeightCalculatorState extends State<HeightCalculator> {
             child: Center(
               child: Text(
                 '${_pointerValue.toStringAsFixed(0)}cm',
-                style: const TextStyle(
-                  fontWeight: FontWeight.normal,
-                  fontSize: 14,
-                  color: Color(0xff0074E3),
-                ),
               ),
             ),
           ),
@@ -143,11 +118,31 @@ class _HeightCalculatorState extends State<HeightCalculator> {
             width: 30,
             height: 60,
             'asset/hour-glass.png',
-            color: const Color(0xff3B3C36),
+            color: const Color(0xffFFD35A),
             fit: BoxFit.fitHeight,
           ),
         ),
       ],
+    );
+  }
+
+  LinearWidgetPointer _buildLinearWidgetPointer({
+    required double value,
+    required Widget child,
+    LinearElementPosition position = LinearElementPosition.cross,
+    double offset = 0,
+  }) {
+    return LinearWidgetPointer(
+      value: value,
+      enableAnimation: false,
+      onChanged: (dynamic value) {
+        setState(() {
+          _pointerValue = value as double;
+        });
+      },
+      offset: offset,
+      position: position,
+      child: child,
     );
   }
 }
