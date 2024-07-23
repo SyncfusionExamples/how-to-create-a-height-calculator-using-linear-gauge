@@ -54,7 +54,7 @@ class _HeightCalculatorState extends State<HeightCalculator> {
       minorTicksPerInterval: 5,
       interval: 25,
       onGenerateLabels: _generateLabels,
-      axisTrackStyle: const LinearAxisTrackStyle(color: Color(0xff134B70)),
+      axisTrackStyle: const LinearAxisTrackStyle(color: Color(0xffBC5A94)),
       markerPointers: <LinearMarkerPointer>[
         LinearShapePointer(
           value: _pointerValue,
@@ -65,7 +65,7 @@ class _HeightCalculatorState extends State<HeightCalculator> {
             });
           },
           shapeType: LinearShapePointerType.rectangle,
-          color: Colors.black,
+          color: const Color(0xff134B70),
           height: 2,
           width: 350,
         ),
@@ -77,7 +77,7 @@ class _HeightCalculatorState extends State<HeightCalculator> {
             height: 16,
             child: Image.asset(
               'asset/rectangle_pointer.png',
-              color: Colors.black,
+              color: const Color(0xff134B70),
             ),
           ),
         ),
